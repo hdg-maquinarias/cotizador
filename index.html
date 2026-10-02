@@ -511,5 +511,6 @@ function cerrarModal(id){ document.getElementById(id).classList.remove('active')
 function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2500); }
 document.querySelectorAll('.modal-overlay').forEach(function(o){ o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('active'); }); });
 </script>
+  <script src="mejoras.js"></script>
 </body>
 </html>
