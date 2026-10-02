@@ -132,24 +132,36 @@
       c.fillStyle = '#1E1E1E'; F('700', 108); c.fillText(usd(d.total), m + 50, y + 218, W - 2 * m - 80);
       y += 300;
     } else {
-      var filas = [
-        ['COL 1 - CONTADO', d.contado_total, true, ['Pago \u00fanico (IVA y flete incluidos)']],
-        ['COL 2 - 4 CHEQUES / 45 D\u00cdAS', d.total2, false, ['Cuota 1 (con IVA y flete): ' + usd(d.cuota1_2), '3 cuotas de ' + usd(d.cuota_pura2)]],
-        ['COL 3 - 7 CHEQUES / 90 D\u00cdAS', d.total3, false, ['Cuota 1 (con IVA y flete): ' + usd(d.cuota1_3), '6 cuotas de ' + usd(d.cuota_pura3)]],
-        ['COL 4 - 13 CHEQUES / 180 D\u00cdAS', d.total4, false, ['Cuota 1 (con IVA y flete): ' + usd(d.cuota1_4), '12 cuotas de ' + usd(d.cuota_pura4)]]
+      c.textAlign = 'left';
+      c.fillStyle = '#FFFBD7'; c.fillRect(m, y, W - 2 * m, 290);
+      c.fillStyle = '#F5C518'; c.fillRect(m, y, 14, 290);
+      c.fillStyle = '#7A5200'; F('700', 48); c.fillText('PRECIO CONTADO', m + 50, y + 76);
+      F('400', 34); c.fillText('IVA y flete incluidos', m + 50, y + 124);
+      c.fillStyle = '#1E1E1E'; F('700', 124); c.fillText(usd(d.contado_total), m + 50, y + 250, W - 2 * m - 80);
+      y += 330;
+      c.fillStyle = '#505050'; F('700', 34); c.fillText('OPCIONES DE FINANCIACI\u00d3N', m, y + 10);
+      y += 40;
+      var planes = [
+        ['4 CHEQUES \u00b7 45 D\u00cdAS', d.cuota1_2, '3', d.cuota_pura2, d.total2],
+        ['7 CHEQUES \u00b7 90 D\u00cdAS', d.cuota1_3, '6', d.cuota_pura3, d.total3],
+        ['13 CHEQUES \u00b7 180 D\u00cdAS', d.cuota1_4, '12', d.cuota_pura4, d.total4]
       ];
-      filas.forEach(function (f, i) {
-        var h = 130 + f[3].length * 52;
-        c.fillStyle = f[2] ? '#FFFBD7' : (i % 2 ? '#F3F3F3' : '#FAFAFA');
-        c.fillRect(m, y, W - 2 * m, h);
-        if (f[2]) { c.fillStyle = '#F5C518'; c.fillRect(m, y, 14, h); }
-        c.textAlign = 'left'; c.fillStyle = f[2] ? '#7A5200' : '#282828'; F('700', 38);
-        c.fillText(f[0], m + 34, y + 52);
-        c.textAlign = 'right'; F('700', 62); c.fillStyle = f[2] ? '#7A5200' : '#1E1E1E';
-        c.fillText(usd(f[1]), W - m - 20, y + 118);
-        c.textAlign = 'left'; F('400', 34); c.fillStyle = '#555';
-        f[3].forEach(function (t, k) { c.fillText(t, m + 34, y + 100 + k * 46 + (f[3].length === 1 ? 0 : 0)); });
-        y += h + 12;
+      planes.forEach(function (p, i) {
+        var h = 256, mid = m + (W - 2 * m) / 2;
+        c.fillStyle = i % 2 ? '#F3F3F3' : '#FAFAFA'; c.fillRect(m, y, W - 2 * m, h);
+        c.fillStyle = '#0D0D0D'; c.fillRect(m, y, W - 2 * m, 66);
+        c.fillStyle = '#F5C518'; F('700', 38); c.fillText(p[0], m + 30, y + 46);
+        c.strokeStyle = '#D0D0D0'; c.lineWidth = 2; c.beginPath(); c.moveTo(mid, y + 84); c.lineTo(mid, y + 210); c.stroke();
+        c.fillStyle = '#777'; F('700', 28); c.fillText('CUOTA 1', m + 30, y + 104);
+        c.fillText(p[2] + ' CUOTAS DE', mid + 30, y + 104);
+        c.fillStyle = '#1E1E1E'; F('700', 60);
+        c.fillText(usd(p[1]), m + 30, y + 168, mid - m - 50);
+        c.fillText(usd(p[3]), mid + 30, y + 168, mid - m - 50);
+        c.fillStyle = '#888'; F('400', 24);
+        c.fillText('incluye IVA y flete', m + 30, y + 202);
+        c.fillText('sin IVA ni flete', mid + 30, y + 202);
+        F('400', 26); c.fillText('Total financiado: ' + usd(p[4]), m + 30, y + 240);
+        y += h + 16;
       });
       y += 10;
     }
