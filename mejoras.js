@@ -115,20 +115,11 @@
     y += 140;
 
     if (d.esp) {
-      var lin = [['Precio de lista', usd(d.p)]];
-      if (d.desc > 0) { lin.push(['Descuento especial', '- ' + usd(d.desc)]); lin.push(['Precio con descuento', usd(d.neto)]); }
-      lin.forEach(function (l) {
-        c.fillStyle = '#333'; F('600', 42); c.textAlign = 'left'; c.fillText(l[0], m + 10, y + 40);
-        c.textAlign = 'right'; F('700', 42); c.fillText(l[1], W - m - 10, y + 40);
-        c.strokeStyle = '#DDD'; c.lineWidth = 2; c.beginPath(); c.moveTo(m, y + 66); c.lineTo(W - m, y + 66); c.stroke();
-        y += 86;
-      });
-      y += 20;
       c.textAlign = 'left';
       c.fillStyle = '#FFFBD7'; c.fillRect(m, y, W - 2 * m, 260);
       c.fillStyle = '#F5C518'; c.fillRect(m, y, 14, 260);
       c.fillStyle = '#7A5200'; F('700', 44); c.fillText('TOTAL CONTADO', m + 50, y + 70);
-      F('400', 34); c.fillText('IVA y flete incluidos', m + 50, y + 118);
+      F('400', 34); c.fillText('IVA incluido', m + 50, y + 118);
       c.fillStyle = '#1E1E1E'; F('700', 108); c.fillText(usd(d.total), m + 50, y + 218, W - 2 * m - 80);
       y += 300;
     } else {
