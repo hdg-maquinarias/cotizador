@@ -1,5 +1,7 @@
 /* Permite elegir el nombre del PDF o la imagen al momento de exportar. */
 (function () {
+  var nombrePDFElegido = null;
+
   function pedirNombre(nombreActual, extension, etiqueta) {
     var sugerido = String(nombreActual || 'Cotizacion_HDG').replace(/\.[^.]+$/, '');
     var escrito = window.prompt('Nombre para guardar ' + etiqueta + ':', sugerido);
@@ -10,20 +12,25 @@
     return (limpio || sugerido) + '.' + extension;
   }
 
-  var jsPDF = window.jspdf && window.jspdf.jsPDF;
-  if (jsPDF && jsPDF.prototype && typeof jsPDF.prototype.save === 'function') {
-    var guardarPDF = jsPDF.prototype.save;
-    jsPDF.prototype.save = function (nombre, opciones) {
-      var elegido = pedirNombre(nombre, 'pdf', 'el PDF');
-      if (elegido === null) return this;
-      return guardarPDF.call(this, elegido, opciones);
-    };
-  }
+  document.addEventListener('click', function (evento) {
+    var boton = evento.target.closest && evento.target.closest('#btnPdf');
+    if (!boton || boton.disabled) return;
+    var sugerido = 'Cotizacion_HDG_' + (document.getElementById('modelo').value.trim() || 'Hanomag') + '_' + new Date().toISOString().slice(0, 10) + '.pdf';
+    nombrePDFElegido = pedirNombre(sugerido, 'pdf', 'el PDF');
+    if (nombrePDFElegido === null) {
+      evento.preventDefault();
+      evento.stopImmediatePropagation();
+    }
+  }, true);
 
   var clickOriginal = HTMLAnchorElement.prototype.click;
   HTMLAnchorElement.prototype.click = function () {
-    if (/\.jpe?g$/i.test(this.download || '')) {
-      var elegido = pedirNombre(this.download, 'jpg', 'la imagen');
+    if (/\.pdf$/i.test(this.download || '') && nombrePDFElegido) {
+      this.download = nombrePDFElegido;
+      nombrePDFElegido = null;
+    } else if (/\.pdf$/i.test(this.download || '') || /\.jpe?g$/i.test(this.download || '')) {
+      var esPDF = /\.pdf$/i.test(this.download || '');
+      var elegido = pedirNombre(this.download, esPDF ? 'pdf' : 'jpg', esPDF ? 'el PDF' : 'la imagen');
       if (elegido === null) return;
       this.download = elegido;
     }
