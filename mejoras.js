@@ -108,11 +108,30 @@
     c.fillText('Fecha: ' + new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' }), tx, 200);
 
     var y = 285;
-    c.fillStyle = '#F2F2EE'; c.fillRect(m, y, W - 2 * m, 100);
-    c.strokeStyle = '#C8B400'; c.lineWidth = 3; c.strokeRect(m, y, W - 2 * m, 100);
+    var modeloTexto = (d.modelo || 'Sin especificar').toUpperCase();
+    var anchoModelo = W - 2 * m - 48;
+    var lineasModelo = [], lineaModelo = '';
+    F('700', 46);
+    modeloTexto.split(/\s+/).forEach(function (palabra) {
+      var candidata = lineaModelo ? lineaModelo + ' ' + palabra : palabra;
+      if (lineaModelo && c.measureText(candidata).width > anchoModelo) {
+        lineasModelo.push(lineaModelo);
+        lineaModelo = palabra;
+      } else {
+        lineaModelo = candidata;
+      }
+    });
+    if (lineaModelo) lineasModelo.push(lineaModelo);
+    var altoLineaModelo = 54;
+    var altoModelo = Math.max(100, 40 + lineasModelo.length * altoLineaModelo);
+    c.fillStyle = '#F2F2EE'; c.fillRect(m, y, W - 2 * m, altoModelo);
+    c.strokeStyle = '#C8B400'; c.lineWidth = 3; c.strokeRect(m, y, W - 2 * m, altoModelo);
     c.fillStyle = '#1E1E1E'; F('700', 46);
-    c.fillText((d.modelo || 'Sin especificar').toUpperCase(), m + 24, y + 67, W - 2 * m - 48);
-    y += 140;
+    var baseModelo = y + (altoModelo - lineasModelo.length * altoLineaModelo) / 2 + 42;
+    lineasModelo.forEach(function (linea, indice) {
+      c.fillText(linea, m + 24, baseModelo + indice * altoLineaModelo);
+    });
+    y += altoModelo + 40;
 
     if (d.esp) {
       c.textAlign = 'left';
